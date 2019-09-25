@@ -8,10 +8,11 @@
       :max="60"
     )
     q-btn(
-      rounded
-      color="green"
-      label="Start"
+      class="onoff-button"
       size="lg"
+      rounded
+      :color="countingDown ? 'deep-orange' : 'green'"
+      :label="countingDown ? 'Stop' : 'Start'"
     )
 </template>
 
@@ -21,7 +22,7 @@ export default {
   data() {
     return {
       minutes: 12,
-      // countingDown: false,
+      countingDown: false
     };
   }
 };
@@ -29,10 +30,12 @@ export default {
 
 <style lang="scss" scoped>
 .app {
-  border: 1px solid red;
   .time-left {
     font-weight: 100;
     font-size: 3rem;
+  }
+  .onoff-button {
+    width: 6rem;
   }
 }
 </style>

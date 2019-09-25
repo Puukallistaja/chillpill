@@ -17,7 +17,8 @@ const components = Object.keys(All).reduce((object, key) => {
 
 const initial = {
   data: {
-    minutes: 12
+    minutes: 12,
+    countingDown: false
   }
 }
 
@@ -35,12 +36,16 @@ describe("Mount Quasar", () => {
   })
   it("has initial data", () => {
     expect(typeof App.data).toBe("function")
+
     expect(vm.minutes).toBeDefined()
+    expect(vm.countingDown).toBeDefined()
+
     expect(vm.minutes).toBe(initial.data.minutes)
+    expect(vm.countingDown).toBe(initial.data.countingDown)
   })
 
   it("renders a section with current timer shown", () => {
-    expect(wrapper.find('.time-left').text()).toBe(`${12} mins`)
+    expect(wrapper.find(".time-left").text()).toBe(`${12} mins`)
   })
 
   it("renders a slider", () => {
@@ -51,7 +56,9 @@ describe("Mount Quasar", () => {
   })
 
   it("renders a button to start the countdown", () => {
-    expect(wrapper.find(components.QBtn)).toBe(true)
+    expect(wrapper.contains(components.QBtn)).toBe(true)
   })
-  
+  it("start button has a correct label", () => {
+    expect(wrapper.find(components.QBtn).text()).toBe("Start")
+  })
 })
