@@ -15,6 +15,12 @@ const components = Object.keys(All).reduce((object, key) => {
   return object
 }, {})
 
+const initial = {
+  data: {
+    minutes: 12
+  }
+}
+
 describe("Mount Quasar", () => {
   const localVue = createLocalVue()
   localVue.use(Quasar, { components }) // , lang: langEn
@@ -27,7 +33,16 @@ describe("Mount Quasar", () => {
   it("passes the sanity check and creates a wrapper", () => {
     expect(wrapper.isVueInstance()).toBe(true)
   })
-  it("has renders a slider", () => {
+  it("has initial data", () => {
+    expect(typeof App.data).toBe("function")
+    expect(vm.minutes).toBeDefined()
+    expect(vm.minutes).toBe(initial.data.minutes)
+  })
+  it("renders a slider", () => {
     expect(wrapper.contains(components.QSlider)).toBe(true)
+  })
+  it("slider is connected to app data model", () => {
+    console.log(wrapper.find(components.QSlider))
+    expect(wrapper.find(components.QSlider).vm.value).toBe(initial.data.minutes)
   })
 })
