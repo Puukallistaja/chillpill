@@ -42,7 +42,7 @@ describe("Mount Quasar", () => {
     expect(vm.countingDown).toBeDefined()
     expect(vm.minutes).toBeDefined()
     expect(vm.timer).toBeDefined()
-    
+
     expect(vm.countingDown).toBe(initial.data.countingDown)
     expect(vm.minutes).toBe(initial.data.minutes)
     expect(vm.timer).toBe(initial.data.timer)
@@ -78,8 +78,8 @@ describe("Mount Quasar", () => {
     const wrapper = mount(App, {
       localVue,
       methods: {
-        toggleCountdown: mockFn
-      }
+        toggleCountdown: mockFn,
+      },
     })
     wrapper.find(".onoff-button").trigger("click")
     expect(mockFn).toBeCalled()

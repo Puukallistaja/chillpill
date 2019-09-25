@@ -4,7 +4,7 @@
     q-slider(
       v-model="minutes"
       label
-      :min="0"
+      :min="1"
       :max="60"
     )
     q-btn(
@@ -44,7 +44,7 @@ export default {
       if (newState === true) {
         this.timer = setInterval(() => {
           --this.minutes
-        }, 1000)
+        }, 1000 * 60)
       } else {
         this.clearTimer()
       }
@@ -53,6 +53,7 @@ export default {
       if (this.timer && min <= 0) {
         this.minutes = 0
         this.countingDown = false
+        this.clearTimer()
 
         const audio = new Audio('statics/chime.wav')
         audio.play()
