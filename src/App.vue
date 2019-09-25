@@ -22,10 +22,10 @@ export default {
   data() {
     return {
       minutes: 12,
-      countingDown: false
-    };
-  }
-};
+      countingDown: false,
+    }
+  },
+}
 </script>
 
 <style lang="scss" scoped>
