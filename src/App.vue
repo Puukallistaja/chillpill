@@ -1,5 +1,6 @@
 <template>
   <div id="q-app">
+    <q-slider />
   </div>
 </template>
 
