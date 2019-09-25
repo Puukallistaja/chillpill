@@ -64,10 +64,6 @@ module.exports = function(ctx) {
           test: /\.pug$/,
           loader: "pug-plain-loader",
         })
-        config.module.rules.push({
-          test: /\.(ogg|mp3|wav|mpe?g)$/i,
-          loader: "file-loader",
-        })
       },
     },
 
