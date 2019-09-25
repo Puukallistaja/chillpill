@@ -38,11 +38,20 @@ describe("Mount Quasar", () => {
     expect(vm.minutes).toBeDefined()
     expect(vm.minutes).toBe(initial.data.minutes)
   })
+
+  it("renders a section with current timer shown", () => {
+    expect(wrapper.find('.time-left').text()).toBe(`${12} mins`)
+  })
+
   it("renders a slider", () => {
     expect(wrapper.contains(components.QSlider)).toBe(true)
   })
   it("slider is connected to app data model", () => {
-    console.log(wrapper.find(components.QSlider))
     expect(wrapper.find(components.QSlider).vm.value).toBe(initial.data.minutes)
   })
+
+  it("renders a button to start the countdown", () => {
+    expect(wrapper.find(components.QBtn)).toBe(true)
+  })
+  
 })
