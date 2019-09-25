@@ -1,7 +1,6 @@
-<template>
-  <div id="q-app">
-    <q-slider />
-  </div>
+<template lang="pug">
+  #q-app
+    q-slider
 </template>
 
 <script>
