@@ -18,8 +18,9 @@ const components = Object.keys(All).reduce((object, key) => {
 const initial = {
   data: {
     minutes: 12,
-    countingDown: false
-  }
+    countingDown: false,
+  },
+  methods: ["toggleCountdown"],
 }
 
 describe("Mount Quasar", () => {
@@ -27,7 +28,7 @@ describe("Mount Quasar", () => {
   localVue.use(Quasar, { components }) // , lang: langEn
 
   const wrapper = mount(App, {
-    localVue
+    localVue,
   })
   const vm = wrapper.vm
 
@@ -43,7 +44,15 @@ describe("Mount Quasar", () => {
     expect(vm.minutes).toBe(initial.data.minutes)
     expect(vm.countingDown).toBe(initial.data.countingDown)
   })
-
+  it("has expected methods", () => {
+    initial.methods.forEach(methodName => {
+      try {
+        expect(vm[methodName]).toBeDefined()
+      } catch (error) {
+        console.log(`Missing: ${methodName}`)
+      }
+    })
+  })
   it("renders a section with current timer shown", () => {
     expect(wrapper.find(".time-left").text()).toBe(`${12} mins`)
   })
@@ -56,9 +65,24 @@ describe("Mount Quasar", () => {
   })
 
   it("renders a button to start the countdown", () => {
-    expect(wrapper.contains(components.QBtn)).toBe(true)
+    expect(wrapper.contains(".onoff-button")).toBe(true)
   })
   it("start button has a correct label", () => {
-    expect(wrapper.find(components.QBtn).text()).toBe("Start")
+    expect(wrapper.find(".onoff-button").text()).toBe("Start")
+  })
+  it("starts countdown when start button clicked", () => {
+    const mockFn = jest.fn()
+    const wrapper = mount(App, {
+      localVue,
+      methods: {
+        toggleCountdown: mockFn
+      }
+    })
+    wrapper.find(".onoff-button").trigger("click")
+    expect(mockFn).toBeCalled()
+  })
+  it("starts countdown when start button clicked", () => {
+    wrapper.find(".onoff-button").trigger("click")
+    expect(vm.countingDown).toBe(true)
   })
 })

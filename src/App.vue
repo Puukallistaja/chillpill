@@ -13,6 +13,7 @@
       rounded
       :color="countingDown ? 'deep-orange' : 'green'"
       :label="countingDown ? 'Stop' : 'Start'"
+      @click="toggleCountdown"
     )
 </template>
 
@@ -21,10 +22,30 @@ export default {
   name: "App",
   data() {
     return {
+      timer: null,
       minutes: 12,
       countingDown: false,
     }
   },
+  methods: {
+    toggleCountdown(newState) {
+      this.countingDown =
+        newState !== undefined && typeof newState === "boolean"
+          ? newState
+          : !this.countingDown
+    },
+  },
+  watch: {
+    countingDown(newState) {
+      if (newState === true) {
+        this.timer = setInterval(() => {
+          --this.minutes
+        }, 1000)
+      } else {
+        clearInterval(this.timer)
+      }
+    }
+  }
 }
 </script>
 
