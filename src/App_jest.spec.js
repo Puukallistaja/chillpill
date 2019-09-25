@@ -17,6 +17,7 @@ const components = Object.keys(All).reduce((object, key) => {
 
 const initial = {
   data: {
+    timer: null,
     minutes: 12,
     countingDown: false,
   },
@@ -38,11 +39,13 @@ describe("Mount Quasar", () => {
   it("has initial data", () => {
     expect(typeof App.data).toBe("function")
 
-    expect(vm.minutes).toBeDefined()
     expect(vm.countingDown).toBeDefined()
-
-    expect(vm.minutes).toBe(initial.data.minutes)
+    expect(vm.minutes).toBeDefined()
+    expect(vm.timer).toBeDefined()
+    
     expect(vm.countingDown).toBe(initial.data.countingDown)
+    expect(vm.minutes).toBe(initial.data.minutes)
+    expect(vm.timer).toBe(initial.data.timer)
   })
   it("has expected methods", () => {
     initial.methods.forEach(methodName => {
@@ -82,6 +85,7 @@ describe("Mount Quasar", () => {
     expect(mockFn).toBeCalled()
   })
   it("starts countdown when start button clicked", () => {
+    expect(vm.timer).toBe(null)
     wrapper.find(".onoff-button").trigger("click")
     expect(vm.countingDown).toBe(true)
   })

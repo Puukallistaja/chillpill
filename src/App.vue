@@ -34,6 +34,10 @@ export default {
           ? newState
           : !this.countingDown
     },
+    clearTimer() {
+      clearInterval(this.timer)
+      this.timer = null
+    }
   },
   watch: {
     countingDown(newState) {
@@ -42,7 +46,16 @@ export default {
           --this.minutes
         }, 1000)
       } else {
-        clearInterval(this.timer)
+        this.clearTimer()
+      }
+    },
+    minutes(min) {
+      if (this.timer && min <= 0) {
+        this.minutes = 0
+        this.countingDown = false
+
+        const audio = new Audio('statics/chime.wav')
+        audio.play()
       }
     }
   }
