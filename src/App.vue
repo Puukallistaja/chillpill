@@ -1,7 +1,9 @@
 <template lang="pug">
   #q-app(
     class="chillpill full-height	column items-center justify-around q-pa-xl"
-    @keyup.left="changeRemainingMillis(1000 * 60)"
+    @keydown.left="changeRemainingMillis(-1000 * 60)"
+    @keyup.left="changeRemainingMillis(-1000 * 60)"
+    @keydown.right="changeRemainingMillis(1000 * 60)"
   )
     .time-set 
       span(v-if="countingDown") {{ formattedMillis }}
@@ -13,6 +15,8 @@
       :label-value="minutes"
       :min="1 * 60 * 1000"
       :max="60 * 60 * 1000"
+      @keydown.left.stop.prevent
+      @keydown.rigth.stop.prevent
     )
     q-btn(
       class="onoff-button"
@@ -43,8 +47,8 @@ export default {
       return Math.ceil(this.millis / 1000)
     },
     formattedMillis() {
-      return date.formatDate(this.millis, "mm:ss") 
-    }
+      return date.formatDate(this.millis, "mm:ss")
+    },
   },
   methods: {
     toggleCountdown(newState) {
@@ -58,9 +62,15 @@ export default {
       this.timer = null
     },
     changeRemainingMillis(thisMuch) {
-      console.log('chnageming millis')
       this.millis += thisMuch
-    }
+
+      if (this.minutes >= 60) {
+        this.millis  = 1000 * 60 * 60
+      }
+      if (this.minutes <= 0) {
+        this.millis = 0
+      }
+    },
   },
   watch: {
     countingDown(newState) {
@@ -82,6 +92,22 @@ export default {
         audio.play()
       }
     },
+  },
+  mounted() {
+    window.addEventListener("keydown", event => {
+      const keys = {
+        LEFT: 37,
+        RIGHT: 39,
+      }
+      switch (event.keyCode) {
+        case keys.LEFT:
+          this.changeRemainingMillis(-1000 * 60)
+          break
+        case keys.RIGHT:
+          this.changeRemainingMillis(1000 * 60)
+          break
+      }
+    })
   },
 }
 </script>
