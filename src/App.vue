@@ -15,8 +15,6 @@
       :label-value="minutes"
       :min="1 * 60 * 1000"
       :max="60 * 60 * 1000"
-      @keydown.left.stop.prevent
-      @keydown.rigth.stop.prevent
     )
     q-btn(
       class="onoff-button"
@@ -65,7 +63,7 @@ export default {
       this.millis += thisMuch
 
       if (this.minutes >= 60) {
-        this.millis  = 1000 * 60 * 60
+        this.millis = 1000 * 60 * 60
       }
       if (this.minutes <= 0) {
         this.millis = 0
@@ -93,19 +91,19 @@ export default {
       }
     },
   },
-  mounted() {
+  created() {
     window.addEventListener("keydown", event => {
       const keys = {
         LEFT: 37,
+        UP: 38,
         RIGHT: 39,
+        DOWN: 40,
       }
-      switch (event.keyCode) {
-        case keys.LEFT:
+      if(event.keyCode === keys.LEFT || event.keyCode === keys.DOWN) {
           this.changeRemainingMillis(-1000 * 60)
-          break
-        case keys.RIGHT:
-          this.changeRemainingMillis(1000 * 60)
-          break
+      }
+      if(event.keyCode === keys.RIGHT || event.keyCode === keys.UP) {
+        this.changeRemainingMillis(1000 * 60)
       }
     })
   },
