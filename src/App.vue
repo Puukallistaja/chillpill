@@ -1,11 +1,18 @@
 <template lang="pug">
-  #q-app(class="app full-height	column items-center justify-around q-pa-xl")
-    .time-left {{ seconds }} mins
+  #q-app(
+    class="chillpill full-height	column items-center justify-around q-pa-xl"
+    @keyup.left="changeRemainingMillis(1000 * 60)"
+  )
+    .time-set 
+      span(v-if="countingDown") {{ formattedMillis }}
+      span(v-else) {{ minutes }} mins
     q-slider(
-      v-model="seconds"
+      class="chillpill__slider"
+      v-model="millis"
       label
-      :min="1"
-      :max="60"
+      :label-value="minutes"
+      :min="1 * 60 * 1000"
+      :max="60 * 60 * 1000"
     )
     q-btn(
       class="onoff-button"
@@ -18,13 +25,25 @@
 </template>
 
 <script>
+import { date } from "quasar"
 export default {
   name: "App",
   data() {
     return {
       timer: null,
-      seconds: 60 * 12,
+      millis: 1000 * 60 * 12,
       countingDown: false,
+    }
+  },
+  computed: {
+    minutes() {
+      return Math.ceil(this.millis / 1000 / 60)
+    },
+    seconds() {
+      return Math.ceil(this.millis / 1000)
+    },
+    formattedMillis() {
+      return date.formatDate(this.millis, "mm:ss") 
     }
   },
   methods: {
@@ -37,37 +56,44 @@ export default {
     clearTimer() {
       clearInterval(this.timer)
       this.timer = null
+    },
+    changeRemainingMillis(thisMuch) {
+      console.log('chnageming millis')
+      this.millis += thisMuch
     }
   },
   watch: {
     countingDown(newState) {
       if (newState === true) {
         this.timer = setInterval(() => {
-          --this.seconds
-        }, 1000 * 60)
+          this.millis -= 1000 //* 60
+        }, 1000)
       } else {
         this.clearTimer()
       }
     },
-    seconds(min) {
+    millis(min) {
       if (this.timer && min <= 0) {
-        this.seconds = 0
+        this.millis = 0
         this.countingDown = false
         this.clearTimer()
 
-        const audio = new Audio('statics/chime.wav')
+        const audio = new Audio("statics/chime.wav")
         audio.play()
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-.app {
-  .time-left {
+.chillpill {
+  .time-set {
     font-weight: 100;
     font-size: 3rem;
+  }
+  &__slider {
+    max-width: 25rem;
   }
   .onoff-button {
     width: 6rem;

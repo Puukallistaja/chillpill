@@ -18,7 +18,7 @@ const components = Object.keys(All).reduce((object, key) => {
 const initial = {
   data: {
     timer: null,
-    seconds: 60 * 12,
+    millis: 1000 * 60 * 12,
     countingDown: false,
   },
   methods: ["toggleCountdown"],
@@ -33,6 +33,9 @@ describe("Mount Quasar", () => {
   })
   const vm = wrapper.vm
 
+  /**
+   * TODO Test watchers
+   */
   it("passes the sanity check and creates a wrapper", () => {
     expect(wrapper.isVueInstance()).toBe(true)
   })
@@ -40,31 +43,43 @@ describe("Mount Quasar", () => {
     expect(typeof App.data).toBe("function")
 
     expect(vm.countingDown).toBeDefined()
-    expect(vm.seconds).toBeDefined()
+    expect(vm.millis).toBeDefined()
     expect(vm.timer).toBeDefined()
 
     expect(vm.countingDown).toBe(initial.data.countingDown)
-    expect(vm.seconds).toBe(initial.data.seconds)
+    expect(vm.millis).toBe(initial.data.millis)
     expect(vm.timer).toBe(initial.data.timer)
+  })
+  it("has computed values that correspont to data", () => {
+    expect(typeof App.computed).toBe("object")
+
+    expect(vm.minutes).toBeDefined()
+    expect(vm.seconds).toBeDefined()
+
+    expect(vm.minutes).toBe(initial.data.millis / 1000 / 60)
+    expect(vm.seconds).toBe(initial.data.millis / 1000)
   })
   it("has expected methods", () => {
     initial.methods.forEach(methodName => {
       try {
         expect(vm[methodName]).toBeDefined()
       } catch (error) {
-        console.log(`Missing: ${methodName}`)
+        console.log(`======= Missing: ${methodName}`)
+        throw error
       }
     })
   })
   it("renders a section with current timer shown", () => {
-    expect(wrapper.find(".time-left").text()).toBe(`${initial.data.seconds} mins`)
+    expect(wrapper.find(".time-set").text()).toBe(
+      `${vm.minutes} mins`
+    )
   })
 
   it("renders a slider", () => {
     expect(wrapper.contains(components.QSlider)).toBe(true)
   })
   it("slider is connected to app data model", () => {
-    expect(wrapper.find(components.QSlider).vm.value).toBe(initial.data.seconds)
+    expect(wrapper.find(components.QSlider).vm.value).toBe(initial.data.millis)
   })
 
   it("renders a button to start the countdown", () => {
@@ -89,11 +104,10 @@ describe("Mount Quasar", () => {
     wrapper.find(".onoff-button").trigger("click")
     expect(vm.countingDown).toBe(true)
   })
-  
-  it('formats a date without throwing exception', () => {
-    // test will automatically fail if an exception is thrown
-    // MMMM and MMM require that a language is 'installed' in Quasar
-    let formattedString = date.formatDate(Date.now(), 'YYYY MMMM MMM DD')
-    console.log('formattedString', formattedString)
+
+  it("formats a date without throwing exception", () => {
+    let formattedString = date.formatDate(initial.data.millis, "mm:ss")
+    console.log("formattedString", formattedString)
+    expect(formattedString).toBeDefined()
   })
 })
