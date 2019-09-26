@@ -1,8 +1,8 @@
 <template lang="pug">
   #q-app(class="app full-height	column items-center justify-around q-pa-xl")
-    .time-left {{ minutes }} mins
+    .time-left {{ seconds }} mins
     q-slider(
-      v-model="minutes"
+      v-model="seconds"
       label
       :min="1"
       :max="60"
@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       timer: null,
-      minutes: 12,
+      seconds: 60 * 12,
       countingDown: false,
     }
   },
@@ -43,15 +43,15 @@ export default {
     countingDown(newState) {
       if (newState === true) {
         this.timer = setInterval(() => {
-          --this.minutes
+          --this.seconds
         }, 1000 * 60)
       } else {
         this.clearTimer()
       }
     },
-    minutes(min) {
+    seconds(min) {
       if (this.timer && min <= 0) {
-        this.minutes = 0
+        this.seconds = 0
         this.countingDown = false
         this.clearTimer()
 

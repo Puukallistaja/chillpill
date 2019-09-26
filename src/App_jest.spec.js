@@ -5,7 +5,7 @@
 import { mount, createLocalVue, shallowMount } from "@vue/test-utils"
 import App from "./App.vue"
 import * as All from "quasar"
-const { Quasar } = All
+const { Quasar, date } = All
 
 const components = Object.keys(All).reduce((object, key) => {
   const val = All[key]
@@ -18,7 +18,7 @@ const components = Object.keys(All).reduce((object, key) => {
 const initial = {
   data: {
     timer: null,
-    minutes: 12,
+    seconds: 60 * 12,
     countingDown: false,
   },
   methods: ["toggleCountdown"],
@@ -40,11 +40,11 @@ describe("Mount Quasar", () => {
     expect(typeof App.data).toBe("function")
 
     expect(vm.countingDown).toBeDefined()
-    expect(vm.minutes).toBeDefined()
+    expect(vm.seconds).toBeDefined()
     expect(vm.timer).toBeDefined()
 
     expect(vm.countingDown).toBe(initial.data.countingDown)
-    expect(vm.minutes).toBe(initial.data.minutes)
+    expect(vm.seconds).toBe(initial.data.seconds)
     expect(vm.timer).toBe(initial.data.timer)
   })
   it("has expected methods", () => {
@@ -57,14 +57,14 @@ describe("Mount Quasar", () => {
     })
   })
   it("renders a section with current timer shown", () => {
-    expect(wrapper.find(".time-left").text()).toBe(`${12} mins`)
+    expect(wrapper.find(".time-left").text()).toBe(`${initial.data.seconds} mins`)
   })
 
   it("renders a slider", () => {
     expect(wrapper.contains(components.QSlider)).toBe(true)
   })
   it("slider is connected to app data model", () => {
-    expect(wrapper.find(components.QSlider).vm.value).toBe(initial.data.minutes)
+    expect(wrapper.find(components.QSlider).vm.value).toBe(initial.data.seconds)
   })
 
   it("renders a button to start the countdown", () => {
@@ -88,5 +88,12 @@ describe("Mount Quasar", () => {
     expect(vm.timer).toBe(null)
     wrapper.find(".onoff-button").trigger("click")
     expect(vm.countingDown).toBe(true)
+  })
+  
+  it('formats a date without throwing exception', () => {
+    // test will automatically fail if an exception is thrown
+    // MMMM and MMM require that a language is 'installed' in Quasar
+    let formattedString = date.formatDate(Date.now(), 'YYYY MMMM MMM DD')
+    console.log('formattedString', formattedString)
   })
 })
