@@ -1,30 +1,33 @@
 <template lang="pug">
   #q-app(
-    class="chillpill full-height	column items-center justify-around q-pa-xl"
+    class="chillpill column items-center justify-center full-height q-pa-xl"
   )
-    .time-set 
-      span(v-if="countingDown") {{ formattedMillis }}
-      span(v-else) {{ minutes }} mins
-    q-slider(
-      class="chillpill__slider"
-      v-model="millis"
-      label
-      :label-value="minutes"
-      :min="1 * 60 * 1000"
-      :max="60 * 60 * 1000"
-    )
-    q-btn(
-      class="onoff-button"
-      size="lg"
-      rounded
-      :color="countingDown ? 'deep-orange' : 'green'"
-      :label="countingDown ? 'Stop' : 'Start'"
-      @click="toggleCountdown"
-    )
+    main.timer(class="full-height full-width column items-center justify-around")
+      .time-set
+        span(v-if="countingDown") {{ formattedMillis }}
+        span(v-else) {{ minutes }} mins
+      q-slider(
+        class="slider"
+        v-model="millis"
+        label
+        :label-value="minutes"
+        :min="1 * 60 * 1000"
+        :max="60 * 60 * 1000"
+      )
+      q-btn(
+        class="onoff-button"
+        size="lg"
+        rounded
+        :color="countingDown ? 'deep-orange' : 'green'"
+        :label="countingDown ? 'Stop' : 'Start'"
+        @click="toggleCountdown"
+      )
 </template>
 
 <script>
 import { date } from "quasar"
+const { formatDate } = date
+
 export default {
   name: "App",
   data() {
@@ -42,7 +45,7 @@ export default {
       return Math.ceil(this.millis / 1000)
     },
     formattedMillis() {
-      return date.formatDate(this.millis, "mm:ss")
+      return formatDate(this.millis, "mm:ss")
     },
   },
   methods: {
@@ -96,10 +99,10 @@ export default {
         RIGHT: 39,
         DOWN: 40,
       }
-      if(event.keyCode === keys.LEFT || event.keyCode === keys.DOWN) {
-          this.changeRemainingMillis(-1000 * 60)
+      if (event.keyCode === keys.LEFT || event.keyCode === keys.DOWN) {
+        this.changeRemainingMillis(-1000 * 60)
       }
-      if(event.keyCode === keys.RIGHT || event.keyCode === keys.UP) {
+      if (event.keyCode === keys.RIGHT || event.keyCode === keys.UP) {
         this.changeRemainingMillis(1000 * 60)
       }
     })
@@ -109,15 +112,19 @@ export default {
 
 <style lang="scss" scoped>
 .chillpill {
-  .time-set {
-    font-weight: 100;
-    font-size: 3rem;
-  }
-  &__slider {
-    max-width: 25rem;
-  }
-  .onoff-button {
-    width: 6rem;
+  .timer {
+    max-height: 40rem;
+
+    .time-set {
+      font-weight: 100;
+      font-size: 3rem;
+    }
+    .slider {
+      max-width: 25rem;
+    }
+    .onoff-button {
+      width: 6rem;
+    }
   }
 }
 </style>

@@ -55,7 +55,9 @@ describe("Mount Quasar", () => {
 
     expect(vm.minutes).toBeDefined()
     expect(vm.seconds).toBeDefined()
+    expect(vm.formattedMillis).toBeDefined()
 
+    expect(vm.formattedMillis).toBe(`${vm.minutes}:00`)
     expect(vm.minutes).toBe(initial.data.millis / 1000 / 60)
     expect(vm.seconds).toBe(initial.data.millis / 1000)
   })
