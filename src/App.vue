@@ -1,9 +1,6 @@
 <template lang="pug">
   #q-app(
     class="chillpill full-height	column items-center justify-around q-pa-xl"
-    @keydown.left="changeRemainingMillis(-1000 * 60)"
-    @keyup.left="changeRemainingMillis(-1000 * 60)"
-    @keydown.right="changeRemainingMillis(1000 * 60)"
   )
     .time-set 
       span(v-if="countingDown") {{ formattedMillis }}
