@@ -1,0 +1,138 @@
+<template lang="pug">
+  #q-app(class="chillpill column items-center justify-center full-height q-pa-xl")
+    main.timer(class="full-height full-width column items-center justify-around")
+      .time-set
+        span(v-if="countingDown") {{ formattedMillis }}
+        span(v-else) {{ minutes }} mins
+      q-slider(
+        class="slider"
+        v-model="millis"
+        label
+        :label-value="minutes"
+        :min="1 * 60 * 1000"
+        :max="60 * 60 * 1000"
+      )
+      timer-controls(
+        :timerIs="timerIs"
+      )
+</template>
+
+<script>
+
+/**
+ * TODO list
+ * 
+ * Refactor to pages
+ *  - Timer
+ * (- Stats (streak?)
+ *  - Settings )
+ * 
+ */
+
+import TimerControls from "./components/timer/TimerControls"
+import { date } from "quasar"
+const { formatDate } = date
+
+export default {
+  name: "App",
+  components: { TimerControls },
+  data() {
+    return {
+      timerIs: {
+        IDLE: true,
+        COUNTING: false,
+        PAUSED: false,
+      },
+      timer: null,
+      millis: 1000 * 60 * 12,
+      countingDown: false,
+    }
+  },
+  computed: {
+    minutes() {
+      return Math.ceil(this.millis / 1000 / 60)
+    },
+    seconds() {
+      return Math.ceil(this.millis / 1000)
+    },
+    formattedMillis() {
+      return formatDate(this.millis, "mm:ss")
+    },
+  },
+  methods: {
+    toggleCountdown(newState) {
+      this.countingDown =
+        newState !== undefined && typeof newState === "boolean"
+          ? newState
+          : !this.countingDown
+    },
+    clearTimer() {
+      clearInterval(this.timer)
+      this.timer = null
+    },
+    changeRemainingMillis(thisMuch) {
+      this.millis += thisMuch
+
+      if (this.minutes >= 60) {
+        this.millis = 1000 * 60 * 60
+      }
+      if (this.minutes <= 0) {
+        this.millis = 0
+      }
+    },
+  },
+  watch: {
+    countingDown(newState) {
+      if (newState === true) {
+        this.timer = setInterval(() => {
+          this.millis -= 1000 //* 60
+        }, 1000)
+      } else {
+        this.clearTimer()
+      }
+    },
+    millis(min) {
+      if (this.timer && min <= 0) {
+        this.millis = 0
+        this.countingDown = false
+        this.clearTimer()
+
+        const audio = new Audio("statics/chime.wav")
+        audio.play()
+      }
+    },
+  },
+  created() {
+    window.addEventListener("keydown", event => {
+      const keys = {
+        LEFT: 37,
+        UP: 38,
+        RIGHT: 39,
+        DOWN: 40,
+      }
+      if (event.keyCode === keys.LEFT || event.keyCode === keys.DOWN) {
+        this.changeRemainingMillis(-1000 * 60)
+      }
+      if (event.keyCode === keys.RIGHT || event.keyCode === keys.UP) {
+        this.changeRemainingMillis(1000 * 60)
+      }
+    })
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.chillpill {
+  .timer {
+    max-height: 40rem;
+
+    .time-set {
+      font-weight: 100;
+      font-size: 3rem;
+    }
+    .slider {
+      max-width: 25rem;
+    }
+  }
+}
+</style>
