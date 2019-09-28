@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { createLocalVue, shallowMount, mount } from "@vue/test-utils"
+import { createLocalVue, mount } from "@vue/test-utils"
 import * as All from "quasar"
 import TimerControls from "../TimerControls.vue"
 
@@ -40,8 +40,46 @@ describe("TimerControls", () => {
   it("renders a button to start the countdown", () => {
     expect(wrapper.contains(".onoff")).toBe(true)
   })
+  it("does not render a button to reset the timer", () => {
+    expect(wrapper.contains(".reset")).toBe(false)
+  })
   it("emits a start event with button press", () => {
-    wrapper.find(".onoff").trigger('click')
-    expect(wrapper.emitted('set-counter-to')).toHaveLength(1)
+    wrapper.find(".onoff").trigger("click")
+    expect(wrapper.emitted("set-counter-to")).toHaveLength(1)
+  })
+  it("renders the reset button when not in idle state", () => {
+    wrapper.setProps({
+      timerIs: {
+        IDLE: false,
+      },
+    })
+    expect(wrapper.contains(".reset")).toBe(true)
+  })
+  it("shows label on onoff button relative to the state", () => {
+    expect(wrapper.find(".onoff").text()).toBe('Start')
+    wrapper.setProps({
+      timerIs: {
+        COUNTING: true,
+      },
+    })
+    expect(wrapper.find(".onoff").text()).toBe('Pause')
+  })
+  it("shows label on onoff button relative to the state", () => {
+    expect(vm.onoffLabel).toBe('Start')
+    wrapper.setProps({
+      timerIs: {
+        COUNTING: true,
+      },
+    })
+    expect(vm.onoffLabel).toBe('Pause')
+    wrapper.setProps({
+      timerIs: {
+        COUNTING: false,
+        PAUSED: true,
+      },
+    })
+    expect(vm.onoffLabel).toBe('Continue')
+  })
+  it("changes onoff button color relative to the state", () => {
   })
 })

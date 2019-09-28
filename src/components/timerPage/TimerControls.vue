@@ -1,14 +1,24 @@
 <template lang="pug">
   .timer-controls(
-    class="flex justify-center"
+    class=""
     :class="{'--counting': timerIs.COUNTING}"
-  )
+  ) {{ Object.keys(timerIs).filter(status => timerIs[status]) }}
+    q-btn(
+      class="control reset"
+      size="lg"
+      rounded
+      outline
+      color="grey"
+      label="Reset"
+      v-if="!timerIs.IDLE"
+      @click="$emit('set-counter-to', 'IDLE')"
+    )
     q-btn(
       class="control onoff"
       size="lg"
       rounded
       :color="timerIs.COUNTING ? 'orange' : 'green'"
-      :label="timerIs.COUNTING ? 'Pause' : 'Start'"
+      :label="onoffLabel"
       @click="$emit('set-counter-to', timerIs.COUNTING ? 'PAUSED' : 'COUNTING')"
     )
 </template>
@@ -22,11 +32,23 @@ export default {
       required: true,
     },
   },
+  computed: {
+    onoffLabel() {
+      return this.timerIs.COUNTING
+        ? "Pause"
+        : this.timerIs.PAUSED
+        ? "Continue"
+        : "Start"
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-.control-buttons {
-  border: 1px solid red;
+.timer-controls {
+  border: 2px solid blue;
+  .control {
+    width: 8.125rem;
+  }
 }
 </style>

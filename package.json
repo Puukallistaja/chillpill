@@ -1,8 +1,8 @@
 {
-  "name": "chillpill",
+  "name": "Chillpill",
   "version": "0.0.1",
   "description": "A chill pill",
-  "productName": "chillpill",
+  "productName": "Chillpill",
   "cordovaId": "org.cordova.quasar.app",
   "author": "Arto Haponen <arto@haponen.com>",
   "private": true,
