@@ -40,20 +40,12 @@ describe("TimerControls", () => {
   it("renders a button to start the countdown", () => {
     expect(wrapper.contains(".onoff")).toBe(true)
   })
-  it("does not render a button to reset the timer", () => {
-    expect(wrapper.contains(".reset")).toBe(false)
+  it("renders a button to reset the timer", () => {
+    expect(wrapper.contains(".reset")).toBe(true)
   })
   it("emits a start event with button press", () => {
     wrapper.find(".onoff").trigger("click")
     expect(wrapper.emitted("set-counter-to")).toHaveLength(1)
-  })
-  it("renders the reset button when not in idle state", () => {
-    wrapper.setProps({
-      timerIs: {
-        IDLE: false,
-      },
-    })
-    expect(wrapper.contains(".reset")).toBe(true)
   })
   it("shows label on onoff button relative to the state", () => {
     expect(wrapper.find(".onoff").text()).toBe('Start')
