@@ -1,5 +1,6 @@
 <template lang="pug">
-  timer
+  q-page(class="flex flex-center")
+    timer
 </template>
 
 <script>

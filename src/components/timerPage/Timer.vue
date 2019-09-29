@@ -1,33 +1,33 @@
 <template lang="pug">
   .timer
-    timer-display(
+    display(
       :millis="millis"
+      :timerIs="timerState"
     )
-    timer-slider(
+    slider.timer__slider(
       :minutes="minutes"
       @set-countdown-time="setCountdownTime"
     )
-    timer-buttons(
+    buttons(
       :timerIs="timerState"
       @set-counter-to="changeTimerState"
     )
 </template>
 
 <script>
-import TimerButtons from "./TimerButtons"
-import TimerDisplay from "./TimerDisplay"
-import TimerSlider from "./TimerSlider"
+import Buttons from "./TimerButtons"
+import Display from "./TimerDisplay"
+import Slider from "./TimerSlider"
 
 const audio = new Audio("statics/chime.wav")
-
 const INITAL_MILLIS = 1000 * 60 * 12
 
 export default {
 	name: "Timer",
 	components: {
-		TimerButtons,
-		TimerDisplay,
-		TimerSlider,
+		Buttons,
+		Display,
+		Slider,
 	},
 	data() {
 		return {
@@ -42,7 +42,7 @@ export default {
 	},
 	computed: {
 		seconds() {
-			return this.millis / 1000
+			return Math.ceil(this.millis / 1000)
 		},
 		minutes() {
 			return Math.ceil(this.millis / 1000 / 60)
@@ -83,13 +83,26 @@ export default {
 	},
 	watch: {
 		millis(currentMillis) {
-      if (currentMillis <= 0) {
-				this.changeTimerState('IDLE')
-        audio.play()
-      }
-    },
-	}
+			if (currentMillis <= 0) {
+				this.changeTimerState("IDLE")
+				audio.play()
+			}
+		},
+	},
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.timer {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	height: 30rem;
+	border: 2px solid red;
+
+	&__slider {
+		width: 80%;
+	}
+}
+</style>

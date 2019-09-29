@@ -1,7 +1,8 @@
 const routes = [
   {
     path: "/",
-    component: () => import("pages/TimerPage.vue"),
+    component: () => import("layouts/ChillpillLayout.vue"),
+    children: [{ path: "", component: () => import("pages/TimerPage.vue") }]
   }
 ];
 

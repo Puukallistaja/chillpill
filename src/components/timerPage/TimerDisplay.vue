@@ -1,5 +1,5 @@
 <template lang="pug">
-  .display {{ humanReadableTime }}
+  h2.display {{ humanReadableTime }}
 </template>
 
 <script>
@@ -14,10 +14,16 @@ export default {
 			type: Number,
 			required: true,
 		},
+		timerIs: {
+			type: Object,
+			required: true,
+		},
 	},
 	computed: {
 		humanReadableTime() {
-			return formatDate(this.millis, "mm:ss")
+			return !this.timerIs.IDLE
+				? formatDate(this.millis, "mm:ss")
+				: `${formatDate(this.millis, "mm")} minutes`
 		},
 	},
 }
