@@ -1,6 +1,6 @@
 <template lang="pug">
   .timer
-    display(
+    display.timer__display(
       :millis="millis"
       :timerIs="timerState"
     )
@@ -99,10 +99,14 @@ export default {
 	justify-content: space-around;
 	align-items: center;
 	height: 30rem;
-	border: 2px solid red;
+	width: 100%;
 
+	&__display {
+		margin-top: 3rem;
+	}
 	&__slider {
 		width: 80%;
+		max-width: 48rem;
 	}
 }
 </style>

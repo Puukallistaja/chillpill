@@ -1,5 +1,5 @@
 <template lang="pug">
-  h2.display {{ humanReadableTime }}
+	.display {{ humanReadableTime }}
 </template>
 
 <script>
@@ -29,4 +29,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.display {
+	font-size: 3rem;
+	font-weight: 300;
+	min-width: 12.5rem;
+	text-align: center;
+}
+</style>

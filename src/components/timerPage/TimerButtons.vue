@@ -51,7 +51,6 @@ export default {
 .timer-buttons {
 	display: grid;
 	justify-content: center;
-	min-width: 24.25rem;
 
 	.button {
 		width: 8.125rem;
@@ -60,12 +59,12 @@ export default {
 
 		&.onoff {
 			&.split {
-				transform: translateX(8rem);
+				transform: translateX(5rem);
 			}
 		}
 		&.reset {
 			&.split {
-				transform: translateX(-8rem);
+				transform: translateX(-5rem);
 			}
 		}
 	}
