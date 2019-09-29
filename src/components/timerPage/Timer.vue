@@ -98,7 +98,7 @@ export default {
 	flex-direction: column;
 	justify-content: space-around;
 	align-items: center;
-	height: 30rem;
+	height: calc(100vh - 50px);
 	width: 100%;
 
 	&__display {
