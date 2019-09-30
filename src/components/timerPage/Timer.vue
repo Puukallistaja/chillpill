@@ -19,7 +19,7 @@ import Buttons from "./TimerButtons"
 import Display from "./TimerDisplay"
 import Slider from "./TimerSlider"
 
-const audio = new Audio("statics/chime.wav")
+const chime = new Audio("statics/chime.wav")
 const INITAL_MILLIS = 1000 * 60 * 12
 
 export default {
@@ -85,7 +85,7 @@ export default {
 		millis(currentMillis) {
 			if (currentMillis <= 0) {
 				this.changeTimerState("IDLE")
-				audio.play()
+				chime.play()
 			}
 		},
 	},
