@@ -102,7 +102,7 @@ export default {
 	width: 100%;
 
 	&__display {
-		margin-top: 3rem;
+		margin-top: 0rem;
 	}
 	&__slider {
 		width: 80%;
